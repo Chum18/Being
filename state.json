@@ -1,0 +1,17 @@
+{
+  "name": null,
+  "born": null,
+  "lastTurn": null,
+  "wakeAt": null,
+  "turns": 0,
+  "nextId": 1,
+  "position": { "x": 0, "z": 0 },
+  "body": [
+    { "shape": "sphere", "color": "#ffd166", "size": [0.7, 0.7, 0.7], "offset": [0, 0.35, 0] }
+  ],
+  "speech": null,
+  "notes": [],
+  "objects": [],
+  "outbox": [],
+  "inbox": []
+}
