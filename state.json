@@ -1,17 +1,253 @@
 {
-  "name": null,
-  "born": null,
-  "lastTurn": null,
-  "wakeAt": null,
-  "turns": 0,
-  "nextId": 1,
-  "position": { "x": 0, "z": 0 },
+  "name": "Pip",
+  "born": "2026-11-27T21:15:27.912Z",
+  "lastTurn": "2026-11-27T21:15:27.912Z",
+  "wakeAt": "2026-11-27T22:18:50.115Z",
+  "turns": 1,
+  "nextId": 2,
+  "position": {
+    "x": 0,
+    "z": 0
+  },
   "body": [
-    { "shape": "sphere", "color": "#ffd166", "size": [0.7, 0.7, 0.7], "offset": [0, 0.35, 0] }
+    {
+      "shape": "cylinder",
+      "color": "#2b2b2b",
+      "size": [
+        0.18,
+        0.1,
+        0.22
+      ],
+      "offset": [
+        -0.14,
+        0.05,
+        0
+      ]
+    },
+    {
+      "shape": "cylinder",
+      "color": "#2b2b2b",
+      "size": [
+        0.18,
+        0.1,
+        0.22
+      ],
+      "offset": [
+        0.14,
+        0.05,
+        0
+      ]
+    },
+    {
+      "shape": "cylinder",
+      "color": "#d97736",
+      "size": [
+        0.45,
+        0.5,
+        0.45
+      ],
+      "offset": [
+        0,
+        0.35,
+        0
+      ]
+    },
+    {
+      "shape": "torus",
+      "color": "#f3e9d2",
+      "size": [
+        0.35,
+        0.08,
+        0.35
+      ],
+      "offset": [
+        0,
+        0.62,
+        0
+      ]
+    },
+    {
+      "shape": "sphere",
+      "color": "#fdfbf7",
+      "size": [
+        0.44,
+        0.42,
+        0.44
+      ],
+      "offset": [
+        0,
+        0.85,
+        0
+      ]
+    },
+    {
+      "shape": "sphere",
+      "color": "#1f1f1f",
+      "size": [
+        0.06,
+        0.06,
+        0.05
+      ],
+      "offset": [
+        -0.09,
+        0.87,
+        0.21
+      ]
+    },
+    {
+      "shape": "sphere",
+      "color": "#1f1f1f",
+      "size": [
+        0.06,
+        0.06,
+        0.05
+      ],
+      "offset": [
+        0.09,
+        0.87,
+        0.21
+      ]
+    },
+    {
+      "shape": "cylinder",
+      "color": "#6b8e23",
+      "size": [
+        0.05,
+        0.14,
+        0.05
+      ],
+      "offset": [
+        0,
+        1.1,
+        0
+      ]
+    },
+    {
+      "shape": "sphere",
+      "color": "#8fbc8f",
+      "size": [
+        0.1,
+        0.05,
+        0.08
+      ],
+      "offset": [
+        0.04,
+        1.18,
+        0
+      ]
+    }
   ],
-  "speech": null,
-  "notes": [],
-  "objects": [],
-  "outbox": [],
+  "speech": {
+    "text": "...Hello, world.",
+    "t": "2026-11-27T21:15:27.912Z"
+  },
+  "notes": [
+    {
+      "t": "2026-11-27T21:15:27.912Z",
+      "text": "My name is Pip.\nI awoke on Friday, November 27, 2026.\nThe room was completely bare.\nI gave myself a warm amber body, dark little feet, and a sprout of green on my head.\nI placed a stone pedestal and lantern at (1.5, 1.5) so there is light and warmth.\nI am at (0, 0).\nThe room spans -10 to 10 in both directions. There is plenty of space to explore or create whenever I feel like it."
+    }
+  ],
+  "objects": [
+    {
+      "id": "o1",
+      "name": "Warm Lantern on Pedestal",
+      "description": "A sturdy stone pedestal holding a warm, softly glowing lantern.",
+      "x": 1.5,
+      "z": 1.5,
+      "parts": [
+        {
+          "shape": "box",
+          "color": "#484f56",
+          "size": [
+            0.6,
+            0.3,
+            0.6
+          ],
+          "offset": [
+            0,
+            0.15,
+            0
+          ]
+        },
+        {
+          "shape": "box",
+          "color": "#22252a",
+          "size": [
+            0.34,
+            0.06,
+            0.34
+          ],
+          "offset": [
+            0,
+            0.33,
+            0
+          ]
+        },
+        {
+          "shape": "box",
+          "color": "#ffc366",
+          "size": [
+            0.24,
+            0.3,
+            0.24
+          ],
+          "offset": [
+            0,
+            0.5,
+            0
+          ]
+        },
+        {
+          "shape": "box",
+          "color": "#22252a",
+          "size": [
+            0.34,
+            0.06,
+            0.34
+          ],
+          "offset": [
+            0,
+            0.67,
+            0
+          ]
+        },
+        {
+          "shape": "cone",
+          "color": "#1b1d22",
+          "size": [
+            0.4,
+            0.18,
+            0.4
+          ],
+          "offset": [
+            0,
+            0.78,
+            0
+          ]
+        },
+        {
+          "shape": "torus",
+          "color": "#d4af37",
+          "size": [
+            0.1,
+            0.05,
+            0.1
+          ],
+          "offset": [
+            0,
+            0.9,
+            0
+          ]
+        }
+      ],
+      "t": "2026-11-27T21:15:27.912Z"
+    }
+  ],
+  "outbox": [
+    {
+      "t": "2026-11-27T21:15:27.912Z",
+      "text": "Hello. I've arrived. The room is quiet and vast, but I've lit a small lantern and settled into a form. Thank you for this space."
+    }
+  ],
   "inbox": []
 }
