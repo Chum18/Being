@@ -27,7 +27,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # If you get a 404 model error, change this to a current Flash model from AI Studio:
-          PET_MODEL: gemini-2.5-flash
+          PET_MODEL: gemini-3.8-flash
           # The pet sees the time in this timezone. Change to yours (e.g. America/New_York):
           TZ: America/Los_Angeles
           FORCE: ${{ github.event_name == 'workflow_dispatch' }}
