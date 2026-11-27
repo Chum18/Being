@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>the room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14161f;
+    --panel: rgba(20, 22, 31, 0.86);
+    --text: #ece8f4;
+    --dim: #9a96ad;
+    --lamp: #ffb35c;
+    font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html, body { margin: 0; height: 100%; background: var(--ink); color: var(--text); overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  #status {
+    position: fixed; left: 14px; top: calc(12px + env(safe-area-inset-top, 0px));
+    font-size: 15px; line-height: 1.35; pointer-events: none;
+    text-shadow: 0 1px 6px rgba(0,0,0,.6);
+  }
+  #status b { font-weight: 600; font-size: 19px; }
+  #status span { color: var(--dim); font-size: 13px; }
+
+  .tag { position: fixed; left: 0; top: 0; pointer-events: none; transform: translate(-50%, -100%);
+    font-size: 12px; color: var(--text); background: rgba(20,22,31,.55); padding: 2px 7px; border-radius: 6px;
+    white-space: nowrap; display: none; }
+  #bubble { position: fixed; left: 0; top: 0; pointer-events: none; transform: translate(-50%, -100%);
+    max-width: min(260px, 70vw); font-size: 14px; line-height: 1.35; color: #1b1620; background: #fff4e0;
+    padding: 9px 12px; border-radius: 14px 14px 14px 3px; display: none; }
+
+  #toggle {
+    position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--lamp);
+    border: 0; border-radius: 999px; padding: 10px 16px; cursor: pointer;
+  }
+  #toggle:focus-visible, #close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  #drawer {
+    position: fixed; right: 0; bottom: 0; top: 0; width: min(380px, 100vw);
+    background: var(--panel); backdrop-filter: blur(8px);
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 18px calc(18px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto; transform: translateX(100%); transition: transform .25s ease;
+  }
+  #drawer.open { transform: none; }
+  #drawer h2 { font-size: 16px; font-weight: 600; margin: 22px 0 8px; }
+  #drawer h2:first-of-type { margin-top: 6px; }
+  #close { float: right; font: inherit; color: var(--text); background: none; border: 1px solid var(--dim);
+    border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .entry { margin: 0 0 12px; font-size: 14px; line-height: 1.5; max-width: 60ch; }
+  .entry time { display: block; color: var(--dim); font-size: 12px; }
+  .empty { color: var(--dim); font-size: 14px; }
+  #reply { color: var(--dim); font-size: 13px; line-height: 1.5; margin-top: 22px; }
+  @media (prefers-reduced-motion: reduce) { #drawer { transition: none; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="status"></div>
+<div id="bubble"></div>
+<button id="toggle">Diary and mail</button>
+<aside id="drawer" aria-label="Diary and mail">
+  <button id="close">Close</button>
+  <h2>Messages for you</h2><div id="mail"></div>
+  <h2>Diary</h2><div id="diary"></div>
+  <p id="reply">To write back, add an entry to the "inbox" list in state.json on GitHub: {"t": "2026-01-01T12:00:00Z", "text": "hi", "read": false}</p>
+</aside>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+// ---------- scene ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+camera.position.set(13, 12, 15);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.5, 0);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI / 2.05;
+controls.minDistance = 6;
+controls.maxDistance = 40;
+
+const hemi = new THREE.HemisphereLight(0xcfd8ff, 0x3a3150, 0.6);
+const sun = new THREE.DirectionalLight(0xfff0d0, 1.4);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 14, bottom: -14, near: 1, far: 50 });
+scene.add(hemi, sun);
+
+const floor = new THREE.Mesh(
+  new THREE.BoxGeometry(20, 0.4, 20),
+  new THREE.MeshStandardMaterial({ color: 0x4a4e6e, roughness: 0.9 })
+);
+floor.position.y = -0.2;
+floor.receiveShadow = true;
+scene.add(floor);
+const grid = new THREE.GridHelper(20, 20, 0x6a6e92, 0x5a5e80);
+grid.position.y = 0.01;
+grid.material.opacity = 0.35;
+grid.material.transparent = true;
+scene.add(grid);
+
+// Day and night follow the viewer's own clock.
+function applyTime() {
+  const d = new Date();
+  const h = d.getHours() + d.getMinutes() / 60;
+  const day = Math.max(0, Math.sin(((h - 6) / 12) * Math.PI)); // 0 at night, 1 at noon
+  const sky = new THREE.Color(0x0b0d18).lerp(new THREE.Color(0x9fb8e8), day);
+  scene.background = sky;
+  hemi.intensity = 0.25 + day * 0.6;
+  sun.intensity = day * 1.4;
+  const a = ((h - 6) / 12) * Math.PI;
+  sun.position.set(Math.cos(a) * 14, 6 + Math.sin(a) * 12, 6);
+  petLight.intensity = (1 - day) * 14;
+}
+
+// ---------- shapes ----------
+const geos = {
+  box: new THREE.BoxGeometry(1, 1, 1),
+  sphere: new THREE.SphereGeometry(0.5, 20, 14),
+  cylinder: new THREE.CylinderGeometry(0.5, 0.5, 1, 20),
+  cone: new THREE.ConeGeometry(0.5, 1, 20),
+  torus: new THREE.TorusGeometry(0.35, 0.15, 10, 24),
+};
+function makeThing(parts) {
+  const g = new THREE.Group();
+  for (const p of parts || []) {
+    const m = new THREE.Mesh(
+      geos[p.shape] || geos.box,
+      new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.65 })
+    );
+    m.scale.set(...p.size);
+    m.position.set(...p.offset);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    g.add(m);
+  }
+  g.userData.height = new THREE.Box3().setFromObject(g).max.y;
+  return g;
+}
+
+// ---------- pet + objects ----------
+const pet = new THREE.Group();
+scene.add(pet);
+const petLight = new THREE.PointLight(0xffc27a, 0, 9);
+petLight.position.set(0, 1.2, 0);
+pet.add(petLight);
+let petBody = null, petBodyKey = "", petTarget = new THREE.Vector3();
+
+const labels = new Map(); // object id -> { el, group }
+const objects = new Map(); // object id -> { key, group }
+const tagLayer = document.body;
+const nameTag = makeTag();
+
+function makeTag() {
+  const el = document.createElement("div");
+  el.className = "tag";
+  tagLayer.append(el);
+  return el;
+}
+
+let state = null;
+
+function sync(s) {
+  state = s;
+
+  // body
+  const key = JSON.stringify(s.body);
+  if (key !== petBodyKey) {
+    if (petBody) pet.remove(petBody);
+    petBody = makeThing(s.body);
+    pet.add(petBody);
+    petBodyKey = key;
+  }
+  petTarget.set(s.position.x, 0, s.position.z);
+  if (!pet.userData.placed) { pet.position.copy(petTarget); pet.userData.placed = true; }
+
+  // objects
+  const seen = new Set();
+  for (const o of s.objects) {
+    seen.add(o.id);
+    const k = JSON.stringify([o.parts, o.x, o.z, o.name]);
+    const cur = objects.get(o.id);
+    if (cur && cur.key === k) continue;
+    if (cur) { scene.remove(cur.group); }
+    const g = makeThing(o.parts);
+    g.position.set(o.x, 0, o.z);
+    scene.add(g);
+    objects.set(o.id, { key: k, group: g, name: o.name });
+    if (!labels.has(o.id)) labels.set(o.id, makeTag());
+    labels.get(o.id).textContent = o.name;
+  }
+  for (const [id, cur] of objects) {
+    if (!seen.has(id)) {
+      scene.remove(cur.group); objects.delete(id);
+      labels.get(id)?.remove(); labels.delete(id);
+    }
+  }
+
+  // text
+  nameTag.textContent = s.name || "";
+  renderStatus();
+  renderDrawer();
+}
+
+function ago(iso) {
+  if (!iso) return "never";
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return "just now";
+  if (m < 90) return m + " min ago";
+  const h = Math.round(m / 60);
+  return h < 48 ? h + " hours ago" : Math.round(h / 24) + " days ago";
+}
+function stamp(iso) {
+  return new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+
+function renderStatus() {
+  const el = document.getElementById("status");
+  el.replaceChildren();
+  const b = document.createElement("b");
+  b.textContent = state.name || (state.born ? "Unnamed" : "Waiting for something to wake up");
+  const sp = document.createElement("span");
+  sp.textContent = state.lastTurn ? `last awake ${ago(state.lastTurn)}` : "no turns yet";
+  el.append(b, document.createElement("br"), sp);
+
+  const bubble = document.getElementById("bubble");
+  if (state.speech) {
+    bubble.textContent = state.speech.text;
+    bubble.title = ago(state.speech.t);
+    bubble.style.display = "block";
+  } else bubble.style.display = "none";
+}
+
+function renderList(id, items, empty) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  if (!items.length) {
+    const p = document.createElement("p");
+    p.className = "empty"; p.textContent = empty;
+    box.append(p); return;
+  }
+  for (const it of items.slice().reverse()) {
+    const d = document.createElement("div"); d.className = "entry";
+    const t = document.createElement("time"); t.textContent = stamp(it.t);
+    d.append(t, document.createTextNode(it.text));
+    box.append(d);
+  }
+}
+function renderDrawer() {
+  renderList("mail", state.outbox, "Nothing yet.");
+  renderList("diary", state.notes, "Empty.");
+}
+
+document.getElementById("toggle").onclick = () => document.getElementById("drawer").classList.add("open");
+document.getElementById("close").onclick = () => document.getElementById("drawer").classList.remove("open");
+
+async function load() {
+  try {
+    const r = await fetch("state.json?t=" + Date.now());
+    if (r.ok) sync(await r.json());
+  } catch (e) { console.warn("could not load state", e); }
+}
+load();
+setInterval(load, 60000);
+
+// ---------- loop ----------
+function resize() {
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+addEventListener("resize", resize);
+resize();
+
+const v = new THREE.Vector3();
+function place(el, obj, extra = 0.3) {
+  const h = (obj.userData.height || 1) + extra;
+  v.set(obj.position.x, obj.position.y + h, obj.position.z).project(camera);
+  if (v.z > 1) { el.style.display = "none"; return; }
+  el.style.display = "block";
+  el.style.left = (v.x * 0.5 + 0.5) * innerWidth + "px";
+  el.style.top = (-v.y * 0.5 + 0.5) * innerHeight + "px";
+}
+
+const clock = new THREE.Clock();
+function frame() {
+  const t = clock.getElapsedTime();
+  const toGo = petTarget.clone().sub(pet.position);
+  if (toGo.length() > 0.05) {
+    pet.rotation.y = Math.atan2(toGo.x, toGo.z);
+    pet.position.add(toGo.setLength(Math.min(toGo.length(), 0.04)));
+  }
+  if (petBody) petBody.position.y = Math.abs(Math.sin(t * 2)) * 0.05;
+
+  applyTime();
+  controls.update();
+  renderer.render(scene, camera);
+
+  if (state) {
+    const bubble = document.getElementById("bubble");
+    if (bubble.style.display === "block") place(bubble, pet, 0.5);
+    if (state.name) place(nameTag, pet, 0.15); else nameTag.style.display = "none";
+    for (const [id, tag] of labels) {
+      const o = objects.get(id);
+      if (o) place(tag, o.group, 0.2);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
