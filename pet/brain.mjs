@@ -257,16 +257,24 @@ function buildPrompt() {
 async function gemini(contents) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
   for (let attempt = 0; attempt < 3; attempt++) {
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": KEY },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents,
-        tools: [{ functionDeclarations: DECLS }],
-        generationConfig: { temperature: 1 },
-      }),
-    });
+    let r;
+    try {
+      r = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": KEY },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM }] },
+          contents,
+          tools: [{ functionDeclarations: DECLS }],
+          generationConfig: { temperature: 1 },
+        }),
+        signal: AbortSignal.timeout(90000), // give up on a hung request after 90s
+      });
+    } catch (e) {
+      console.log(`Gemini request failed (${e.name}), retrying...`);
+      await sleep(8000 * (attempt + 1));
+      continue;
+    }
     if (r.ok) return r.json();
     if (r.status === 429 || r.status >= 500) {
       console.log(`Gemini said ${r.status}, retrying...`);
