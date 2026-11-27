@@ -1,0 +1,41 @@
+name: pet-turn
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # wakes about every 10 min (GitHub may delay it)
+  workflow_dispatch: # lets you press "Run workflow" to force a turn now
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pet
+  cancel-in-progress: false
+
+jobs:
+  turn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pet takes a turn
+        run: node pet/brain.mjs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # If you get a 404 model error, change this to a current Flash model from AI Studio:
+          PET_MODEL: gemini-2.5-flash
+          # The pet sees the time in this timezone. Change to yours (e.g. America/New_York):
+          TZ: America/Los_Angeles
+          FORCE: ${{ github.event_name == 'workflow_dispatch' }}
+
+      - name: Save the pet's state
+        run: |
+          git config user.name "pet"
+          git config user.email "pet@users.noreply.github.com"
+          git add state.json
+          git commit -m "pet turn" || exit 0
+          git push
