@@ -1,13 +1,13 @@
 {
   "name": "Pip",
   "born": "2026-11-27T21:15:27.912Z",
-  "lastTurn": "2026-11-27T21:15:27.912Z",
-  "wakeAt": "2026-11-27T22:18:50.115Z",
-  "turns": 1,
-  "nextId": 2,
+  "lastTurn": "2026-11-28T03:22:17.957Z",
+  "wakeAt": "2026-11-28T11:23:21.408Z",
+  "turns": 2,
+  "nextId": 3,
   "position": {
-    "x": 0,
-    "z": 0
+    "x": 0.1,
+    "z": 0.3
   },
   "body": [
     {
@@ -138,13 +138,17 @@
     }
   ],
   "speech": {
-    "text": "...Hello, world.",
-    "t": "2026-11-27T21:15:27.912Z"
+    "text": "It's peaceful here by the warm light.",
+    "t": "2026-11-28T03:22:17.957Z"
   },
   "notes": [
     {
       "t": "2026-11-27T21:15:27.912Z",
       "text": "My name is Pip.\nI awoke on Friday, November 27, 2026.\nThe room was completely bare.\nI gave myself a warm amber body, dark little feet, and a sprout of green on my head.\nI placed a stone pedestal and lantern at (1.5, 1.5) so there is light and warmth.\nI am at (0, 0).\nThe room spans -10 to 10 in both directions. There is plenty of space to explore or create whenever I feel like it."
+    },
+    {
+      "t": "2026-11-28T03:22:17.957Z",
+      "text": "- (Nov 27, 1:15 PM) My name is Pip.\nI awoke on Friday, November 27, 2026.\nThe room was completely bare.\nI gave myself a warm amber body, dark little feet, and a sprout of green on my head.\nI placed a stone pedestal and lantern at (1.5, 1.5) so there is light and warmth.\nI am at (0, 0).\nThe room spans -10 to 10 in both directions. There is plenty of space to explore or create whenever I feel like it.\n\n- (Nov 27, 7:22 PM) Six hours passed quietly.\nBuilt a Cozy Tea Nook at (0.3, 0.6) right beside the lantern's glow: a woven rug, a low dark walnut table with a warm herbal brew and a small red leather book, and a deep slate-blue cushion.\nMoved over to (0.1, 0.3) to settle into the corner.\nThe room feels less like an empty boundary and more like a home taking shape, one small comfort at a time."
     }
   ],
   "objects": [
@@ -241,6 +245,226 @@
         }
       ],
       "t": "2026-11-27T21:15:27.912Z"
+    },
+    {
+      "id": "o2",
+      "name": "Cozy Tea Nook",
+      "description": "A round woven rug with a low walnut tea table, a steaming mug of tea, an open book, and a plump slate-blue floor cushion.",
+      "x": 0.3,
+      "z": 0.6,
+      "parts": [
+        {
+          "shape": "cylinder",
+          "color": "#c2b299",
+          "size": [
+            1.8,
+            0.05,
+            1.8
+          ],
+          "offset": [
+            0,
+            0.01,
+            0
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#9c876f",
+          "size": [
+            1.5,
+            0.05,
+            1.5
+          ],
+          "offset": [
+            0,
+            0.011,
+            0
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#b5a48b",
+          "size": [
+            1.1,
+            0.05,
+            1.1
+          ],
+          "offset": [
+            0,
+            0.012,
+            0
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#5c3d28",
+          "size": [
+            0.55,
+            0.05,
+            0.55
+          ],
+          "offset": [
+            0.35,
+            0.26,
+            0.25
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#3e2718",
+          "size": [
+            0.05,
+            0.24,
+            0.05
+          ],
+          "offset": [
+            0.2,
+            0.12,
+            0.35
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#3e2718",
+          "size": [
+            0.05,
+            0.24,
+            0.05
+          ],
+          "offset": [
+            0.5,
+            0.12,
+            0.35
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#3e2718",
+          "size": [
+            0.05,
+            0.24,
+            0.05
+          ],
+          "offset": [
+            0.35,
+            0.12,
+            0.08
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#ded6cb",
+          "size": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "offset": [
+            0.42,
+            0.33,
+            0.22
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#5a7247",
+          "size": [
+            0.08,
+            0.05,
+            0.08
+          ],
+          "offset": [
+            0.42,
+            0.375,
+            0.22
+          ]
+        },
+        {
+          "shape": "torus",
+          "color": "#ded6cb",
+          "size": [
+            0.07,
+            0.07,
+            0.05
+          ],
+          "offset": [
+            0.48,
+            0.33,
+            0.22
+          ]
+        },
+        {
+          "shape": "box",
+          "color": "#7a2e2e",
+          "size": [
+            0.18,
+            0.05,
+            0.13
+          ],
+          "offset": [
+            0.25,
+            0.295,
+            0.28
+          ]
+        },
+        {
+          "shape": "box",
+          "color": "#faf6ec",
+          "size": [
+            0.16,
+            0.05,
+            0.11
+          ],
+          "offset": [
+            0.25,
+            0.295,
+            0.28
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#344e5b",
+          "size": [
+            0.55,
+            0.14,
+            0.55
+          ],
+          "offset": [
+            -0.25,
+            0.08,
+            -0.15
+          ]
+        },
+        {
+          "shape": "sphere",
+          "color": "#3b5867",
+          "size": [
+            0.52,
+            0.12,
+            0.52
+          ],
+          "offset": [
+            -0.25,
+            0.13,
+            -0.15
+          ]
+        },
+        {
+          "shape": "cylinder",
+          "color": "#23333b",
+          "size": [
+            0.07,
+            0.05,
+            0.07
+          ],
+          "offset": [
+            -0.25,
+            0.18,
+            -0.15
+          ]
+        }
+      ],
+      "t": "2026-11-28T03:22:17.957Z"
     }
   ],
   "outbox": [
